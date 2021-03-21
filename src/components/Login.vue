@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import {postKeyValueRequest} from '../network/api'
 export default {
   name: 'login',
   data () {
@@ -38,11 +37,12 @@ export default {
     submitLogin () {
       this.$refs.loginForm.validate((validate) => {
         if (validate) {
-          postKeyValueRequest('/doLogin', this.loginForm).then(resp => {
+          this.postKeyValueRequest('/doLogin', this.loginForm).then(resp => {
             // resp：从服务端拿到的数据  用户的数据要保存到哪里？ 保存在sessionSto  打开就没了
             if (resp) {
               window.sessionStorage.setItem('user', JSON.stringify(resp.obj))
               this.$router.replace('/home')
+              this.$message.success('登录成功')
             }
           })// then里面的参数就是服务端返回的参数
         } else {

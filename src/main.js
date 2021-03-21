@@ -4,10 +4,12 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import {postKeyValueRequest, getRequest} from './network/api'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
+Vue.prototype.postKeyValueRequest = postKeyValueRequest
+Vue.prototype.getRequest = getRequest
 new Vue({
   router,
   store,
