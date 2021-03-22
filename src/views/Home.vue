@@ -3,9 +3,10 @@
     <el-container>
       <el-header class="header">
         <div class="title">微人事</div>
+        <!--@command="commandHandler" 点击菜单项触发的事件回调-->
         <el-dropdown class="userInfo" @command="commandHandler">
            <span class="el-dropdown-link">
-               {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+               {{user.name}}<i><img :src="user.userface" alt=""></i>
            </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
@@ -15,8 +16,22 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-aside width="200px">
+          <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo" router>
+            <el-submenu index="1" v-for="(item,index) of this.$router.options.routes" v-if="!item.hidden" :key="index">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>{{item.name}}</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item :index="child.path" v-for="(child,index) of item.children" :key="index">{{child.name}}</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+          </el-menu>
+        </el-aside>
+        <el-main><router-view/></el-main>
       </el-container>
     </el-container>
   </div>
@@ -31,6 +46,7 @@ export default {
     }
   },
   methods: {
+    // 该方法有一个参数，cmd
     commandHandler (cmd) {
       if (cmd === 'logout') {
         this.$confirm('此操作将注销登录，是否继续？', '提示', {
@@ -38,6 +54,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          // 使用封装好的getRequest方法，参数写注销登录的地址
           this.getRequest('/logout')
           window.sessionStorage.removeItem('user')
           this.$router.replace('/')
@@ -48,7 +65,10 @@ export default {
           })
         })
       }
-    }
+    },
+    // menuClick (index, indexPath) {
+    //   this.$router.push(index)
+    // }
   }
 }
 </script>
@@ -57,8 +77,8 @@ export default {
 .header {
   background-color: #409eff;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: center; /*竖轴上居中*/
+  justify-content:space-between; /*空白的地方在中间*/
   padding: 0 15px;
   box-sizing: border-box;
 }
@@ -74,6 +94,7 @@ export default {
 /*.el-icon-arrow-down {*/
 /*  font-size: 12px;*/
 /*}*/
+/*鼠标放到连接上的鼠标变为小手形状*/
 .userInfo{
   cursor: pointer;
 }
