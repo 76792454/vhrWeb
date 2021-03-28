@@ -9,6 +9,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    //配置代理能够访问SpringBoot后台
     proxyTable: {
       '/': {
         target: 'http://localhost:8081',

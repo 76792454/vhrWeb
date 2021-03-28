@@ -20,15 +20,17 @@
           <el-menu
             default-active="2"
             class="el-menu-vertical-demo" router>
-            <el-submenu index="1" v-for="(item,index) of this.$router.options.routes" v-if="!item.hidden" :key="index">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>{{item.name}}</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item :index="child.path" v-for="(child,index) of item.children" :key="index">{{child.name}}</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+           <el-submenu :index="index+''" v-for="(item,index) of this.routes" v-if="!item.hidden" :key="index">
+             <template slot="title">
+              <i style="color: #409eff;margin-right: 10px" :class="item.iconCls"></i>
+               <span>{{item.name}}</span>
+             </template>
+             <el-menu-item-group>
+               <el-menu-item :index="child.path" v-for="(child,index) of item.children" :key="index">
+                 {{child.name}}
+               </el-menu-item>
+             </el-menu-item-group>
+           </el-submenu>
           </el-menu>
         </el-aside>
         <el-main><router-view/></el-main>
@@ -43,6 +45,11 @@ export default {
   data () {
     return {
       user: JSON.parse(window.sessionStorage.getItem('user'))
+    }
+  },
+  computed: {
+    routes () {
+      return this.$store.state.routes
     }
   },
   methods: {
@@ -66,9 +73,9 @@ export default {
         })
       }
     },
-    // menuClick (index, indexPath) {
-    //   this.$router.push(index)
-    // }
+    menuClick (index, indexPath) {
+      this.$router.push(index)
+    }
   }
 }
 </script>
